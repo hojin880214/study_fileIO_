@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="File">
+
+    <insert id="insert" parameterType="FileVO">
+        insert into em.newtable (filefullpath,filename,filecontent) values (#{fileFullPath},#{fileName},#{fileContent})
+    </insert>
+
+    <select id="selectList" resultType="FileVO">
+        select * from em.newtable
+    </select>
+
+</mapper>
