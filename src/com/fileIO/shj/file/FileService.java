@@ -1,19 +1,8 @@
 package com.fileIO.shj.file;
 
+public interface FileService {
 
-import com.fileIO.shj.annotation.FileController;
-import com.fileIO.shj.annotation.FileMapping;
+    FileVO makeFile();
+    void readFile();
 
-@FileController
-public class FileService {
-
-    @FileMapping(menuNumber = 1)
-    public void makeFile(){
-        System.out.println("makeFile");
-    }
-
-    @FileMapping(menuNumber = 2)
-    public void readFile(){
-        System.out.println("readFile");
-    }
 }

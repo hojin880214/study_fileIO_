@@ -1,7 +1,6 @@
 package com.fileIO.shj.menu;
 
-import com.fileIO.shj.annotation.FileController;
-import com.fileIO.shj.annotation.FileMapping;
+import com.fileIO.shj.annotation.FileAnnotationHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,9 +10,11 @@ import java.util.Scanner;
 public class FileIOMenu {
 
     private static Logger LOGGER = LoggerFactory.getLogger(FileIOMenu.class);
+    FileAnnotationHandler fileAnnotationHandler = new FileAnnotationHandler();
 
     public void printFileIOMenu() {
 
+        LOGGER.info("");
         LOGGER.info("-----------------------FileIO-------------------------");
         LOGGER.info("------------------------------------------------------");
         LOGGER.info("1. 새 파일");
@@ -63,14 +64,11 @@ public class FileIOMenu {
 
     public boolean selectFileIOMenu(int selectedNumber) {
 
-
-
-//        switch (selectedNumber) {
-//            case 1:
-//                System.out.println("1. 새 파일 선택하셨습니다.");
-//                fileDAOimpl.addFileList(fileDAOimpl.makeFile());
-//                fileDAOimpl.printFileList();
-//                return false;
+        switch (selectedNumber) {
+            case 1:
+                System.out.println("1. 새 파일 선택하셨습니다.");
+                fileAnnotationHandler.handleFileAnnotation(selectedNumber);
+                return false;
 //            case 2:
 //                System.out.println("2. 파일 열기 선택하셨습니다.");
 //                fileDAOimpl.makeTextFileList();
@@ -87,10 +85,10 @@ public class FileIOMenu {
 //                }
 //
 //                return false;
-//            case 3:
-//                System.out.println("3. 나가기 선택하셨습니다. 종료합니다.");
-//                return true;
-//        }
+            case 3:
+                System.out.println("3. 나가기 선택하셨습니다. 종료합니다.");
+                return true;
+        }
 
         return false;
 

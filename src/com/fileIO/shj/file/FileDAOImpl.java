@@ -39,12 +39,18 @@ public class FileDAOImpl implements FileDAO {
     @Override
     public FileVO makeFile() {
 
-        System.out.print("파일 이름을 적어주세요 : ");
-        String fileName = scanner.nextLine();
+        String fileName = getScannerFileName();
         String fileFullPath = projectPath + "\\file\\" + fileName + ".txt";
+        String fileContent = getFileContent(fileFullPath);
+        System.out.println(System.lineSeparator() + fileFullPath + "의 내용 입력을 완료하였습니다." + System.lineSeparator());
+
+        return new FileVO(fileFullPath,fileName,fileContent);
+
+    }
+
+    private String getFileContent(String fileFullPath) {
         String fileContent = "";
         int lineNumber = 0;
-
         try (
                 FileWriter fw = new FileWriter(fileFullPath, false);
                 BufferedWriter bw = new BufferedWriter(fw)
@@ -59,13 +65,16 @@ public class FileDAOImpl implements FileDAO {
                 bw.write(line);
                 bw.newLine();
             }
-            System.out.println(System.lineSeparator() + fileFullPath + "의 내용 입력을 완료하였습니다." + System.lineSeparator());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return fileContent;
+    }
 
-        return new FileVO(fileFullPath,fileName,fileContent);
-
+    private String getScannerFileName() {
+        LOGGER.info("파일 이름을 적어주세요.");
+        String fileName = scanner.nextLine();
+        return fileName;
     }
 
     @Override
