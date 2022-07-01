@@ -8,31 +8,31 @@ import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
+@RequiredArgsConstructor
 @FileController
 public class FileServiceImpl implements FileService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FileServiceImpl.class);
 
     private final FileDAO fileDAO;
-    public FileServiceImpl(FileDAO fileDAO){
-        this.fileDAO = fileDAO;
-    }
 
     private final String projectPath = System.getProperty("user.dir");
     Scanner scanner = new Scanner(System.in);
+    List<FileVO> fileList = new ArrayList<>();
 
     @Override
     @FileMapping(menuNumber = 1)
-    public FileVO makeFile(){
-//        System.out.println("1111111");
+    public void addFile(){
+
         String fileName = getScannerFileName();
         String fileFullPath = projectPath + "\\file\\" + fileName + ".txt";
         String fileContent = getFileContent(fileFullPath);
-//        fileDAO.makeFile();
-
-        return new FileVO("s","s","s");
+        FileVO fileVO = new FileVO(fileFullPath,fileName,fileContent);
+        fileDAO.addFile(fileVO);
 
     }
 
@@ -58,8 +58,8 @@ public class FileServiceImpl implements FileService {
                 FileWriter fw = new FileWriter(fileFullPath, false);
                 BufferedWriter bw = new BufferedWriter(fw)
         ) {
-            System.out.println(fileFullPath + " 이 생성되었습니다.");
-            System.out.println("파일 내용을 입력해주세요.(입력 종료는 개행 후 :q 입력해주세요)" + System.lineSeparator());
+            LOGGER.info(fileFullPath + " 이 생성되었습니다.");
+            LOGGER.info("파일 내용을 입력해주세요.(입력 종료는 개행 후 :q 입력해주세요)" + System.lineSeparator());
             while (true) {
                 System.out.print(" " + ++lineNumber + " ");
                 String line = scanner.nextLine();
@@ -71,7 +71,7 @@ public class FileServiceImpl implements FileService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(System.lineSeparator() + fileFullPath + "의 내용 입력을 완료하였습니다." + System.lineSeparator());
+        LOGGER.info(System.lineSeparator() + fileFullPath + "의 내용 입력을 완료하였습니다." + System.lineSeparator());
 
         return fileContent;
 

@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class FileIOMenu {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(FileIOMenu.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileIOMenu.class);
     FileAnnotationHandler fileAnnotationHandler = new FileAnnotationHandler();
 
     public void printFileIOMenu() {
@@ -66,7 +66,7 @@ public class FileIOMenu {
 
         switch (selectedNumber) {
             case 1:
-                System.out.println("1. 새 파일 선택하셨습니다.");
+                LOGGER.info("1. 새 파일 선택하셨습니다.");
                 fileAnnotationHandler.handleFileAnnotation(selectedNumber);
                 return false;
 //            case 2:
@@ -86,7 +86,7 @@ public class FileIOMenu {
 //
 //                return false;
             case 3:
-                System.out.println("3. 나가기 선택하셨습니다. 종료합니다.");
+                LOGGER.info("3. 나가기 선택하셨습니다. 종료합니다.");
                 return true;
         }
 

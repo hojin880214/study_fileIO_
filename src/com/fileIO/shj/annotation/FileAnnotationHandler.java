@@ -6,8 +6,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import org.apache.ibatis.session.SqlSessionFactory;
-
+import com.fileIO.shj.myBatis.MyBatisConnectionFactory;
 
 public class FileAnnotationHandler {
 
@@ -15,7 +14,7 @@ public class FileAnnotationHandler {
 
         try{
 
-            Class clazz = Class.forName("com.fileIO.shj.file.FileServiceImpl");
+            Class<?> clazz = Class.forName("com.fileIO.shj.file.FileServiceImpl");
 
             Annotation[] annotations = clazz.getAnnotations();
 
@@ -29,33 +28,32 @@ public class FileAnnotationHandler {
 
     }
 
-    private void getFileServiceMethod(int num, Class clazz) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    private void getFileServiceMethod(int num, Class<?> clazz) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         for (Method method : clazz.getDeclaredMethods()) {
             checkFileMappingAnnotation(num, clazz, method);
         }
     }
 
-    private void checkFileMappingAnnotation(int num, Class clazz, Method method) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    private void checkFileMappingAnnotation(int num, Class<?> clazz, Method method) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         if (method.isAnnotationPresent(FileMapping.class)) {
             getFileMappingMenuNumber(num, clazz, method);
         }
     }
 
-    private void getFileMappingMenuNumber(int num, Class clazz, Method method) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    private void getFileMappingMenuNumber(int num, Class<?> clazz, Method method) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         FileMapping fileMapping = method.getDeclaredAnnotation(FileMapping.class);
         checkMenuNumber(num, clazz, method, fileMapping);
     }
 
-    private void checkMenuNumber(int num, Class clazz, Method method, FileMapping fileMapping) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    private void checkMenuNumber(int num, Class<?> clazz, Method method, FileMapping fileMapping) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         if(!(num == fileMapping.menuNumber())) return;
         invokeMethod(clazz, method);
     }
 
-    private void invokeMethod(Class clazz, Method method) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, InvocationTargetException {
-        Class[] constructorParameterTypes = {com.fileIO.shj.file.FileDAO.class};
-        Constructor constructor = clazz.getConstructor(constructorParameterTypes);
-        SqlSessionFactory sqlSessionFactory = null;
-        FileDAOImpl fileDAOImpl = new FileDAOImpl(sqlSessionFactory);
+    private void invokeMethod(Class<?> clazz, Method method) throws NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
+        Class<?>[] constructorParameterTypes = {com.fileIO.shj.file.FileDAO.class};
+        Constructor<?> constructor = clazz.getConstructor(constructorParameterTypes);
+        FileDAOImpl fileDAOImpl = new FileDAOImpl(MyBatisConnectionFactory.getSqlSessionFactory());
         method.invoke(constructor.newInstance(fileDAOImpl));
     }
 
