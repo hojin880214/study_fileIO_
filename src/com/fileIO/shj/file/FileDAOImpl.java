@@ -6,13 +6,9 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
 
@@ -22,7 +18,6 @@ public class FileDAOImpl implements FileDAO {
 
     List<FileVO> fileList = new ArrayList<>();
     List<String> textFileList = new ArrayList<>();
-    Scanner scanner = new Scanner(System.in);
 
     // 색상 상수값 위치 어디로 옮길지
     public static final String RESET = "\u001B[0m";
@@ -38,21 +33,11 @@ public class FileDAOImpl implements FileDAO {
 
     @Override
     public int addFile(FileVO fileVO) {
-        sqlSessionFactory = MyBatisConnectionFactory.getSqlSessionFactory();
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        try{
-            sqlSession.insert("File.insert",fileVO);
-        }catch (Exception e){
+
+        try (SqlSession sqlSession = sqlSessionFactory.openSession(true);) {
+            sqlSession.insert("File.insert", fileVO);
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
-            sqlSession.close();
-        }
-        sqlSession = sqlSessionFactory.openSession();
-        try{
-            fileList = sqlSession.selectList("File.selectList");
-        }finally {
-            sqlSession.close();
         }
 
         return 1;

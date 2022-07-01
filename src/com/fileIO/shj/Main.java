@@ -15,10 +15,10 @@ public class Main {
 
         FileIOMenu fileIOMenu = new FileIOMenu();
 
-//        while(true){
+        while(true){
             fileIOMenu.printFileIOMenu();
                 fileIOMenu.selectFileIOMenu(fileIOMenu.selectFileIOMenuNumber());
 
-//        }
+        }
     }
 }
